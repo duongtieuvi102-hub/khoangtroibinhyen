@@ -414,7 +414,7 @@ export const AuthorPublishModal: React.FC<AuthorPublishModalProps> = ({
         {/* ========================================================= */}
         {/* 1. STICKY MODAL TOP HEADER                                */}
         {/* ========================================================= */}
-        <div className="shrink-0 flex items-center justify-between px-4 sm:px-6 py-3.5 bg-gradient-to-r from-pink-50 via-white to-amber-50 dark:from-stone-900 dark:via-stone-900 dark:to-stone-850 border-b border-pink-100 dark:border-stone-800">
+        <div className="shrink-0 flex items-center justify-between px-4 sm:px-6 py-3.5 bg-gradient-to-r from-pink-50 via-white to-amber-50 dark:from-stone-900 dark:via-stone-900 dark:to-stone-900 border-b border-pink-100 dark:border-stone-800">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="w-8 h-8 rounded-xl bg-pink-500 text-white flex items-center justify-center shrink-0 shadow-xs">
               <Sparkles className="w-4 h-4" />
@@ -478,7 +478,7 @@ export const AuthorPublishModal: React.FC<AuthorPublishModalProps> = ({
         {/* ========================================================= */}
         {/* 2. ADMIN NAVIGATION SYSTEM (NEVER HIDDEN / ALWAYS VISIBLE) */}
         {/* ========================================================= */}
-        <div className="shrink-0 bg-stone-50/90 dark:bg-stone-850/90 border-b border-pink-200/80 dark:border-stone-800">
+        <div className="shrink-0 bg-stone-50/90 dark:bg-stone-900 border-b border-pink-200/80 dark:border-stone-800">
           
           {/* Quick Select Dropdown for Small / Zoomed-in screens */}
           <div className="lg:hidden px-3 py-2 bg-pink-100/60 dark:bg-stone-800 border-b border-pink-200 dark:border-stone-700 flex items-center gap-2">
@@ -490,15 +490,15 @@ export const AuthorPublishModal: React.FC<AuthorPublishModalProps> = ({
               onChange={(e) => setActiveTab(e.target.value as TabType)}
               className="flex-1 px-2.5 py-1.5 rounded-lg border border-pink-300 dark:border-stone-600 bg-white dark:bg-stone-900 text-xs font-semibold text-pink-700 dark:text-pink-300 focus:outline-hidden"
             >
-              <option value="newStory">📝 1. Đăng truyện mới</option>
-              <option value="editStory">✍️ 2. Chỉnh sửa truyện ({stories.length})</option>
-              <option value="newChapter">📄 3. Đăng chương mới</option>
-              <option value="editChapter">✏️ 4. Chỉnh sửa chương truyện</option>
-              <option value="genres">🏷️ 5. Quản lý Thể loại & Chuyên mục</option>
-              <option value="announcements">📢 6. Bảng tin & Thông báo ({announcements.length})</option>
-              <option value="music">🎵 7. Quản lý Playlist Nhạc</option>
-              <option value="letters">💌 8. Hòm thư bạn đọc ({letters.length})</option>
-              <option value="manage">📚 9. Quản lý tổng quan ({stories.length})</option>
+              <option value="newStory" className="bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100">📝 1. Đăng truyện mới</option>
+              <option value="editStory" className="bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100">✍️ 2. Chỉnh sửa truyện ({stories.length})</option>
+              <option value="newChapter" className="bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100">📄 3. Đăng chương mới</option>
+              <option value="editChapter" className="bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100">✏️ 4. Chỉnh sửa chương truyện</option>
+              <option value="genres" className="bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100">🏷️ 5. Quản lý Thể loại & Chuyên mục</option>
+              <option value="announcements" className="bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100">📢 6. Bảng tin & Thông báo ({announcements.length})</option>
+              <option value="music" className="bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100">🎵 7. Quản lý Playlist Nhạc</option>
+              <option value="letters" className="bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100">💌 8. Hòm thư bạn đọc ({letters.length})</option>
+              <option value="manage" className="bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100">📚 9. Quản lý tổng quan ({stories.length})</option>
             </select>
           </div>
 
@@ -1121,7 +1121,7 @@ export const AuthorPublishModal: React.FC<AuthorPublishModalProps> = ({
                   {filteredLetters.map((letter) => (
                     <div
                       key={letter.id}
-                      className="p-4 rounded-2xl bg-white dark:bg-stone-850 border border-stone-200 dark:border-stone-700 space-y-3"
+                      className="p-4 rounded-2xl bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 space-y-3"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div>
@@ -1262,7 +1262,7 @@ export const AuthorPublishModal: React.FC<AuthorPublishModalProps> = ({
                   </p>
                 </div>
               ) : (
-                <div className="divide-y divide-stone-100 dark:divide-stone-800 border border-stone-200 dark:border-stone-700 rounded-2xl overflow-hidden bg-white dark:bg-stone-850">
+                <div className="divide-y divide-stone-100 dark:divide-stone-800 border border-stone-200 dark:border-stone-700 rounded-2xl overflow-hidden bg-white dark:bg-stone-800">
                   {stories.map((s) => (
                     <div
                       key={s.id}

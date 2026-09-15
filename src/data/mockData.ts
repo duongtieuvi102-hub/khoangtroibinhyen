@@ -8,7 +8,7 @@ export const STORIES: Story[] = [
     author: 'Lam Hải Nhược Tuyết',
     translator: 'Mellifluous',
     status: 'completed',
-    genre: ['Thanh xuân vườn trường', 'Ngọt sủng', 'Chữa lành', 'HE'],
+    genre: ['Tất cả thể loại mùa hè', 'Thanh xuân vườn trường', 'Ngọt sủng', 'Chữa lành', 'HE'],
     summary:
       'Năm mười bảy tuổi, mùa hè trôi qua dưới tán lá phong rợp bóng sân trường. Cậu thiếu niên ngồi bàn sau luôn lặng lẽ chuyền cho cô hộp sữa dâu mỗi sáng. Mười năm sau gặp lại tại ga tàu điện ngầm thành phố, cơn gió năm ấy lại một lần nữa thổi bay vạt áo thanh xuân.',
     totalChapters: 45,

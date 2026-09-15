@@ -9,6 +9,7 @@ import {
   Layers,
 } from 'lucide-react';
 import { Story } from '../types';
+import { subscribeGenres, getAvailableGenres } from '../utils/genreManager';
 
 interface SidebarGenreDropdownProps {
   stories: Story[];
@@ -18,6 +19,8 @@ interface SidebarGenreDropdownProps {
 
 // Map each genre to a fitting charming emoji
 const GENRE_EMOJIS: Record<string, string> = {
+  'Tất cả thể loại mùa hè': '🌻',
+  'Tất cả các thể loại mùa hè': '🌻',
   'Thanh xuân vườn trường': '🏫',
   'Ngọt sủng': '🍰',
   'Chữa lành': '☕',
@@ -45,12 +48,23 @@ export const SidebarGenreDropdown: React.FC<SidebarGenreDropdownProps> = ({
   const [scrollProgress, setScrollProgress] = useState<number>(0);
   const [canScrollUp, setCanScrollUp] = useState<boolean>(false);
   const [canScrollDown, setCanScrollDown] = useState<boolean>(false);
+  const [managedGenres, setManagedGenres] = useState<string[]>(() => getAvailableGenres());
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const listContainerRef = useRef<HTMLDivElement>(null);
 
-  // All unique genres from all stories
-  const allGenres: string[] = Array.from(new Set<string>(stories.flatMap((s) => s.genre)));
+  // Subscribe to dynamic genres from genreManager
+  useEffect(() => {
+    const unsub = subscribeGenres((updated) => {
+      setManagedGenres(updated);
+    });
+    return unsub;
+  }, []);
+
+  // All unique genres from both stories and managed genres
+  const allGenres: string[] = Array.from(
+    new Set<string>([...managedGenres, ...stories.flatMap((s) => s.genre)])
+  ).filter(Boolean);
 
   // Count how many stories match each genre
   const getGenreCount = (genre: string) => {
@@ -147,7 +161,7 @@ export const SidebarGenreDropdown: React.FC<SidebarGenreDropdownProps> = ({
             <div className="flex items-center gap-1.5 truncate">
               <span className="font-serif text-xs sm:text-[13px] font-bold text-stone-800 dark:text-white truncate">
                 {selectedGenre === 'all'
-                  ? '✦ Tất cả thể loại mùa hè'
+                  ? '✦ Xem toàn bộ tác phẩm'
                   : `${GENRE_EMOJIS[selectedGenre] || '🏷️'} ${selectedGenre}`}
               </span>
               {selectedGenre !== 'all' && (
@@ -242,7 +256,7 @@ export const SidebarGenreDropdown: React.FC<SidebarGenreDropdownProps> = ({
             onScroll={updateScrollState}
             className="emerald-scrollbar max-h-56 overflow-y-auto space-y-1 pr-1 py-0.5"
           >
-            {/* Option: All Genres */}
+            {/* Option: All Stories Reset */}
             <button
               type="button"
               onClick={() => handleSelect('all')}
@@ -254,7 +268,7 @@ export const SidebarGenreDropdown: React.FC<SidebarGenreDropdownProps> = ({
             >
               <span className="flex items-center gap-2 text-xs font-serif">
                 <span className="text-emerald-600 dark:text-emerald-400">✦</span>
-                <span className="text-stone-800 dark:text-white">Tất cả thể loại mùa hè</span>
+                <span className="text-stone-800 dark:text-white">Xem toàn bộ tác phẩm</span>
               </span>
               <div className="flex items-center gap-1.5">
                 <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-200 dark:border-stone-700">

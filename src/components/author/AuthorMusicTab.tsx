@@ -171,7 +171,7 @@ export const AuthorMusicTab: React.FC<AuthorMusicTabProps> = ({ onFeedback }) =>
       </div>
 
       {/* Add New Track Form */}
-      <div className="p-5 rounded-2xl bg-white dark:bg-stone-850 border border-pink-200/80 dark:border-stone-700 shadow-xs space-y-4">
+      <div className="p-5 rounded-2xl bg-white dark:bg-stone-800 border border-pink-200/80 dark:border-stone-700 shadow-xs space-y-4">
         <div className="flex items-center gap-2 text-pink-600 dark:text-pink-400 font-semibold text-xs sm:text-sm">
           <Plus className="w-4 h-4" />
           <span>Thêm tác phẩm nhạc mới / Gắn link phát</span>
@@ -276,7 +276,7 @@ export const AuthorMusicTab: React.FC<AuthorMusicTabProps> = ({ onFeedback }) =>
           </span>
         </div>
 
-        <div className="divide-y divide-stone-100 dark:divide-stone-800 border border-stone-200 dark:border-stone-700 rounded-2xl overflow-hidden bg-white dark:bg-stone-850">
+        <div className="divide-y divide-stone-100 dark:divide-stone-800 border border-stone-200 dark:border-stone-700 rounded-2xl overflow-hidden bg-white dark:bg-stone-800">
           {tracks.map((t, idx) => {
             const isThisTrackPlaying = isPlaying && currentTrack?.id === t.id;
             const isEditing = editingTrackId === t.id;

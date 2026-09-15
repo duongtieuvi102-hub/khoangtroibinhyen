@@ -100,7 +100,7 @@ export const AuthorAnnouncementsTab: React.FC<AuthorAnnouncementsTabProps> = ({
   return (
     <div className="space-y-6">
       {/* Form Card (Create or Edit) */}
-      <div className="p-5 rounded-2xl bg-white dark:bg-stone-850 border border-pink-200/80 dark:border-stone-700 shadow-xs space-y-4">
+      <div className="p-5 rounded-2xl bg-white dark:bg-stone-800 border border-pink-200/80 dark:border-stone-700 shadow-xs space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-pink-600 dark:text-pink-400 font-semibold text-xs sm:text-sm">
             {editingAnnId ? <Edit2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
@@ -210,7 +210,7 @@ export const AuthorAnnouncementsTab: React.FC<AuthorAnnouncementsTabProps> = ({
                 className={`p-4 rounded-2xl border transition-all ${
                   editingAnnId === ann.id
                     ? 'border-pink-500 bg-pink-50/50 dark:bg-pink-950/20 ring-2 ring-pink-200'
-                    : 'border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-850 hover:border-pink-200'
+                    : 'border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 hover:border-pink-200'
                 }`}
               >
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">

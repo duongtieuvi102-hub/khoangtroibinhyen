@@ -2,6 +2,7 @@ import { db } from '../lib/firebase';
 import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
 
 export const DEFAULT_GENRES: string[] = [
+  'Tất cả thể loại mùa hè',
   'Ngôn tình',
   'Thanh xuân',
   'Ngọt sủng',
@@ -22,6 +23,7 @@ export const DEFAULT_GENRES: string[] = [
 ];
 
 const STORAGE_KEY = 'mel_dynamic_genres_v2';
+const MIGRATION_KEY = 'mel_has_added_summer_all_genre_v1';
 type Listener = (genres: string[]) => void;
 const listeners = new Set<Listener>();
 
@@ -30,7 +32,18 @@ let cachedGenres: string[] = (() => {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        // One-time migration to ensure 'Tất cả thể loại mùa hè' is included initially
+        const hasMigrated = localStorage.getItem(MIGRATION_KEY);
+        if (!hasMigrated) {
+          localStorage.setItem(MIGRATION_KEY, 'true');
+          if (!parsed.includes('Tất cả thể loại mùa hè')) {
+            parsed.unshift('Tất cả thể loại mùa hè');
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+          }
+        }
+        return parsed;
+      }
     }
   } catch {}
   return [...DEFAULT_GENRES];
