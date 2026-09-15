@@ -156,12 +156,31 @@
         "authorReply": { "type": "string" }
       },
       "required": ["message"]
+    },
+    "music_tracks": {
+      "title": "Music Playlist Track",
+      "description": "Background music tracks with title, artist, audio link and mood",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "artist": { "type": "string" },
+        "duration": { "type": "string" },
+        "mood": { "type": "string" },
+        "audioUrl": { "type": "string" },
+        "addedBy": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["title"]
     }
   },
   "firestore": {
     "/site_stats/{statId}": {
       "schema": "site_stats",
       "description": "Global statistics like total visits and online users"
+    },
+    "/music_tracks/{trackId}": {
+      "schema": "music_tracks",
+      "description": "Custom playlist tracks configured by admin or authors"
     },
     "/reader_letters/{letterId}": {
       "schema": "reader_letters",

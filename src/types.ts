@@ -29,6 +29,8 @@ export interface Chapter {
   title: string;
   publishedAt: string;
   isLocked: boolean;
+  passwordHint?: string;
+  passwordKey?: string;
   content: string;
   translatorNote?: string;
   wordCount: number;

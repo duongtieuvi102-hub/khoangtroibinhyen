@@ -54,6 +54,12 @@ service cloud.firestore {
       allow write: if true;
     }
 
+    // Music playlist tracks (custom audio links added by author/admin)
+    match /music_tracks/{trackId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
     // Site configuration and publishing status
     match /site_config/{configId} {
       allow read: if true;

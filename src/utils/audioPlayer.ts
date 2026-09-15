@@ -1,13 +1,15 @@
 // Ambient Background Music Engine using Web Audio API + HTMLAudioElement for custom streaming links
 // Allows authors, admins, and collaborators to add, remove, and link custom music streams or MP3s.
 
+import { db, doc, setDoc, deleteDoc, onSnapshot, collection } from '../lib/firebase';
+
 export interface AudioTrack {
   id: string;
   title: string;
   artist: string;
   duration?: string;
   mood?: string;
-  audioUrl?: string; // Direct audio URL (mp3, wav, stream)
+  audioUrl?: string; // Direct audio URL (mp3, wav, stream, m4a)
   addedBy?: string;
   createdAt?: string;
 }
@@ -95,6 +97,7 @@ class BackgroundMusicEngine {
 
   constructor() {
     this.loadTracksFromStorage();
+    this.initFirestoreSync();
 
     try {
       const savedVolume = localStorage.getItem('better_bgm_volume');
@@ -110,6 +113,48 @@ class BackgroundMusicEngine {
       }
     } catch {
       // safe fallback
+    }
+  }
+
+  private initFirestoreSync() {
+    try {
+      const tracksCol = collection(db, 'music_tracks');
+      onSnapshot(
+        tracksCol,
+        (snapshot) => {
+          if (!snapshot.empty) {
+            const remoteTracks: AudioTrack[] = [];
+            snapshot.forEach((docSnap) => {
+              const data = docSnap.data();
+              remoteTracks.push({
+                id: docSnap.id,
+                title: data.title || 'Giai điệu',
+                artist: data.artist || 'Mellifluous',
+                duration: data.duration || '03:30',
+                mood: data.mood || 'Thư giãn',
+                audioUrl: data.audioUrl || '',
+                addedBy: data.addedBy || 'Tác giả',
+                createdAt: data.createdAt || new Date().toISOString(),
+              });
+            });
+
+            // Sort by createdAt or maintain stable order
+            remoteTracks.sort((a, b) => (a.createdAt || '').localeCompare(b.createdAt || ''));
+
+            if (remoteTracks.length > 0) {
+              this.tracks = remoteTracks;
+              TRACK_LIST = this.tracks;
+              this.saveTracksToStorage();
+              this.notify();
+            }
+          }
+        },
+        (err) => {
+          console.warn('Firestore music_tracks subscription note:', err.message);
+        }
+      );
+    } catch (e) {
+      console.warn('Firestore sync init error:', e);
     }
   }
 
@@ -140,7 +185,23 @@ class BackgroundMusicEngine {
     return [...this.tracks];
   }
 
-  public addTrack(track: Omit<AudioTrack, 'id'>): AudioTrack {
+  public getIsPlaying(): boolean {
+    return this.isPlaying;
+  }
+
+  public getCurrentTrack(): AudioTrack {
+    return this.tracks[this.currentTrackIndex] || this.tracks[0] || DEFAULT_TRACK_LIST[0];
+  }
+
+  public getPlaybackState(): { isPlaying: boolean; track: AudioTrack; tracks: AudioTrack[] } {
+    return {
+      isPlaying: this.isPlaying,
+      track: this.getCurrentTrack(),
+      tracks: this.getTracks(),
+    };
+  }
+
+  public async addTrack(track: Omit<AudioTrack, 'id'>): Promise<AudioTrack> {
     const newTrack: AudioTrack = {
       ...track,
       id: `track-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
@@ -149,10 +210,37 @@ class BackgroundMusicEngine {
     this.tracks.push(newTrack);
     this.saveTracksToStorage();
     this.notify();
+
+    // Async sync to Firestore
+    try {
+      await setDoc(doc(db, 'music_tracks', newTrack.id), newTrack);
+    } catch (err) {
+      console.warn('Error saving track to Firestore:', err);
+    }
+
     return newTrack;
   }
 
-  public removeTrack(trackId: string): boolean {
+  public async updateTrack(trackId: string, updates: Partial<AudioTrack>): Promise<boolean> {
+    const index = this.tracks.findIndex((t) => t.id === trackId);
+    if (index === -1) return false;
+
+    this.tracks[index] = {
+      ...this.tracks[index],
+      ...updates,
+    };
+    this.saveTracksToStorage();
+    this.notify();
+
+    try {
+      await setDoc(doc(db, 'music_tracks', trackId), this.tracks[index], { merge: true });
+    } catch (err) {
+      console.warn('Error updating track in Firestore:', err);
+    }
+    return true;
+  }
+
+  public async removeTrack(trackId: string): Promise<boolean> {
     if (this.tracks.length <= 1) return false; // keep at least 1 track
     const indexToRemove = this.tracks.findIndex((t) => t.id === trackId);
     if (indexToRemove === -1) return false;
@@ -170,11 +258,19 @@ class BackgroundMusicEngine {
     } else {
       this.notify();
     }
+
+    try {
+      await deleteDoc(doc(db, 'music_tracks', trackId));
+    } catch (err) {
+      console.warn('Error removing track from Firestore:', err);
+    }
+
     return true;
   }
 
-  public resetToDefaultTracks() {
+  public async resetToDefaultTracks(): Promise<void> {
     this.stopExternalAudio();
+    const oldTracks = [...this.tracks];
     this.tracks = [...DEFAULT_TRACK_LIST];
     this.saveTracksToStorage();
     this.currentTrackIndex = 0;
@@ -182,6 +278,20 @@ class BackgroundMusicEngine {
       this.play(0);
     } else {
       this.notify();
+    }
+
+    // Clean up Firestore custom tracks
+    try {
+      for (const t of oldTracks) {
+        if (!DEFAULT_TRACK_LIST.some((def) => def.id === t.id)) {
+          await deleteDoc(doc(db, 'music_tracks', t.id)).catch(() => {});
+        }
+      }
+      for (const def of DEFAULT_TRACK_LIST) {
+        await setDoc(doc(db, 'music_tracks', def.id), def).catch(() => {});
+      }
+    } catch (err) {
+      console.warn('Error syncing default tracks to Firestore:', err);
     }
   }
 

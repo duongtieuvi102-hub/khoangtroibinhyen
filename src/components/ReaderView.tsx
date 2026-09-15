@@ -343,10 +343,12 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
   const handleUnlock = (e: React.FormEvent) => {
     e.preventDefault();
     const cleanInput = inputPass.trim().toLowerCase();
-    const cleanKey = (story.passwordKey || '').trim().toLowerCase();
+    const chapterKey = (chapter.passwordKey || '').trim().toLowerCase();
+    const storyKey = (story.passwordKey || '').trim().toLowerCase();
+    const cleanKey = chapterKey || storyKey;
 
     if (
-      cleanInput === cleanKey ||
+      (cleanKey && cleanInput === cleanKey) ||
       cleanInput === 'mellifluous' ||
       cleanInput === 'chuyen' ||
       cleanInput === '5cms'
@@ -355,7 +357,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
       setErrorMsg('');
       setInputPass('');
     } else {
-      setErrorMsg('Mật khẩu chưa chính xác rồi bạn ơi! Hãy xem kỹ gợi ý phía dưới nhé ~');
+      setErrorMsg('Mật khẩu chưa chính xác rồi bạn ơi! Hãy xem kỹ gợi ý của chương này nhé ~');
     }
   };
 
@@ -857,7 +859,7 @@ export const ReaderView: React.FC<ReaderViewProps> = ({
                 <span>Gợi ý pass chương này:</span>
               </div>
               <p className="font-serif text-xs sm:text-sm font-medium text-stone-800 dark:text-stone-200 italic break-words">
-                "{story.passwordHint || 'Tên dịch giả viết thường không dấu (mellifluous)'}"
+                "{chapter.passwordHint || story.passwordHint || 'Tên dịch giả viết thường không dấu (mellifluous)'}"
               </p>
               <p className="text-[10px] sm:text-[11px] text-stone-400 font-sans">
                 *Quy tắc giải mã: viết thường, không dấu, không dấu cách.

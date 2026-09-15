@@ -752,7 +752,7 @@ export default function App() {
       <AuthModal />
 
       {/* Global Background Music Player Widget */}
-      <BackgroundMusicBar />
+      <BackgroundMusicBar onOpenAuthorStudio={() => setIsAuthorModalOpen(true)} />
 
       {/* Footer */}
       <Footer onSelectTab={handleNavSelect} />

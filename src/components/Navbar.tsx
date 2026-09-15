@@ -66,49 +66,50 @@ export const Navbar: React.FC<NavbarProps> = ({
     badge?: string;
   }
 
-  // 6 desktop navigation items with full, complete labels (never truncated or clipped)
+  // 5 desktop navigation items (Home is integrated into "Better and better" logo, VIP badge removed from Password)
   const desktopNavItems: NavItem[] = [
-    {
-      id: 'home',
-      label: 'Trang chủ',
-      shortLabel: 'Trang chủ',
-      icon: <Home className="w-3.5 h-3.5 stroke-[1.75]" />,
-    },
     {
       id: 'completed',
       label: 'Truyện đã hoàn',
-      shortLabel: 'Truyện đã hoàn',
+      shortLabel: 'Đã hoàn',
       icon: <BookOpen className="w-3.5 h-3.5 stroke-[1.75]" />,
     },
     {
       id: 'ongoing',
       label: 'Đang tiến hành',
-      shortLabel: 'Đang tiến hành',
+      shortLabel: 'Tiến hành',
       icon: <Bookmark className="w-3.5 h-3.5 stroke-[1.75]" />,
     },
     {
       id: 'password',
       label: 'Gợi ý Password',
-      shortLabel: 'Gợi ý Password',
+      shortLabel: 'Password',
       icon: <Key className="w-3.5 h-3.5 stroke-[1.75]" />,
-      badge: 'VIP',
     },
     {
       id: 'other',
       label: 'Góc tâm sự & Nhạc',
-      shortLabel: 'Góc tâm sự & Nhạc',
+      shortLabel: 'Tâm sự & Nhạc',
       icon: <Heart className="w-3.5 h-3.5 stroke-[1.75]" />,
     },
     {
       id: 'about',
       label: 'Về Mellifluous',
-      shortLabel: 'Về Mellifluous',
+      shortLabel: 'Về Mel',
       icon: <Info className="w-3.5 h-3.5 stroke-[1.75]" />,
     },
   ];
 
-  // Mobile navigation includes the exact same clean items
-  const mobileNavItems: NavItem[] = desktopNavItems;
+  // Mobile navigation includes Home link explicitly for quick drawer access
+  const mobileNavItems: NavItem[] = [
+    {
+      id: 'home',
+      label: 'Trang chủ (better and better)',
+      shortLabel: 'Trang chủ',
+      icon: <Home className="w-3.5 h-3.5 stroke-[1.75]" />,
+    },
+    ...desktopNavItems,
+  ];
 
   const handleSelect = (tab: ActiveTab) => {
     onSelectTab(tab);
@@ -124,17 +125,21 @@ export const Navbar: React.FC<NavbarProps> = ({
         bg-white/95 border-pink-100/80 text-stone-800
         dark:bg-stone-900/95 dark:border-stone-800/90 dark:text-stone-100 shadow-xs"
     >
-      <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 h-14 sm:h-16 flex items-center justify-between gap-2 lg:gap-3 box-border">
+      <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 h-14 sm:h-16 flex items-center justify-between gap-2 lg:gap-4 box-border">
         {/* =================================================================== */}
-        {/* 1. BRAND LOGO (CLICK TO RETURN HOME)                                */}
+        {/* 1. BRAND LOGO INTEGRATED WITH HOME ("TRANG CHỦ")                     */}
         {/* =================================================================== */}
         <div className="flex items-center shrink-0">
           <button
             type="button"
             id="navbar-logo-btn"
             onClick={() => handleSelect('home')}
-            className="group flex items-center gap-2 text-left focus:outline-hidden cursor-pointer p-1 -ml-1 rounded-xl transition-all duration-200 hover:bg-pink-50/70 dark:hover:bg-stone-800/60"
-            title="Nhấp để về Trang chủ (better and better)"
+            className={`group flex items-center gap-2 text-left focus:outline-hidden cursor-pointer px-2 py-1 -ml-1 rounded-xl transition-all duration-200 border ${
+              isHomeActive
+                ? 'bg-pink-50/90 dark:bg-pink-950/50 border-pink-200/90 dark:border-pink-800/60 shadow-2xs'
+                : 'border-transparent hover:bg-pink-50/60 dark:hover:bg-stone-800/60'
+            }`}
+            title="Trang chủ • better and better"
             aria-label="Về Trang chủ blog Mellifluous"
           >
             {/* Flower Logo Icon Stamp */}
@@ -159,11 +164,11 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* =================================================================== */}
-        {/* 2. CENTERED DESKTOP NAVIGATION (FULL LABELS, NEVER OVERLAPPING)     */}
+        {/* 2. CENTERED DESKTOP NAVIGATION (NO OVERLAPPING, SPACIOUS & CLEAN)    */}
         {/* =================================================================== */}
         <nav
           aria-label="Thanh điều hướng chính"
-          className="hidden lg:flex items-center justify-center gap-1 xl:gap-1.5 flex-1 min-w-0 px-1"
+          className="hidden xl:flex items-center justify-center gap-1.5 2xl:gap-2.5 flex-1 min-w-0 px-2"
         >
           {desktopNavItems.map((item) => {
             const isActive = currentTab === item.id;
@@ -173,7 +178,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 id={`nav-link-${item.id}`}
                 type="button"
                 onClick={() => handleSelect(item.id)}
-                className={`group relative px-2 lg:px-2.5 xl:px-3 py-1.5 rounded-xl text-xs xl:text-[13px] font-medium transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap cursor-pointer shrink-0 ${
+                className={`group relative px-2.5 2xl:px-3.5 py-1.5 rounded-xl text-xs 2xl:text-sm font-medium transition-all duration-200 flex items-center gap-1.5 whitespace-nowrap cursor-pointer shrink-0 ${
                   isActive
                     ? 'bg-pink-100/90 text-pink-900 dark:bg-pink-950/80 dark:text-pink-200 font-semibold shadow-2xs border border-pink-200/80 dark:border-pink-800'
                     : 'text-stone-600 hover:text-pink-600 hover:bg-pink-50/70 dark:text-stone-300 dark:hover:text-pink-300 dark:hover:bg-stone-800/60'
@@ -189,11 +194,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                   {item.icon}
                 </span>
                 <span className="whitespace-nowrap leading-none">{item.label}</span>
-                {item.badge && (
-                  <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 bg-amber-400 text-amber-950 rounded-full dark:bg-amber-500 dark:text-stone-950 shadow-2xs leading-none">
-                    {item.badge}
-                  </span>
-                )}
                 {isActive && (
                   <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-gradient-to-r from-pink-500 to-rose-400 rounded-full" />
                 )}
@@ -206,7 +206,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* 3. ACTION CONTROLS (AUTHOR STUDIO, USER, UTILITY TOOLBAR)           */}
         {/* =================================================================== */}
         <div id="navbar-action-controls" className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          {/* Author Studio & Publishing Reset Button - ONLY FOR AUTHOR & COLLABORATORS */}
+          {/* Author Studio Button - ONLY FOR AUTHOR & COLLABORATORS */}
           {isAuthor && onOpenAuthorModal && (
             <button
               type="button"
@@ -216,7 +216,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               title="Trung tâm Quản lý bài đăng & Đưa số liệu về 0 (Chỉ dành cho Tác giả)"
             >
               <span className="select-none text-xs">🌸</span>
-              <span className="whitespace-nowrap leading-none font-medium">Bàn làm việc Tác giả</span>
+              <span className="whitespace-nowrap leading-none font-medium">Bàn làm việc</span>
             </button>
           )}
 
@@ -350,12 +350,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           </div>
 
-          {/* Mobile & Tablet Hamburger Menu Button (Visible on < lg: 1024px) */}
+          {/* Mobile & Tablet Hamburger Menu Button (Visible on < xl: 1280px) */}
           <button
             type="button"
             id="mobile-menu-toggle-btn"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-stone-100 text-stone-700 hover:bg-pink-100/70 hover:text-pink-600 dark:bg-stone-800 dark:text-stone-200 dark:hover:bg-stone-700 border border-stone-200 dark:border-stone-700 cursor-pointer transition-colors"
+            className="xl:hidden flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-stone-100 text-stone-700 hover:bg-pink-100/70 hover:text-pink-600 dark:bg-stone-800 dark:text-stone-200 dark:hover:bg-stone-700 border border-stone-200 dark:border-stone-700 cursor-pointer transition-colors"
             aria-label="Mở menu chuyển hướng"
             aria-expanded={isMobileMenuOpen}
           >
@@ -369,20 +369,20 @@ export const Navbar: React.FC<NavbarProps> = ({
       </div>
 
       {/* =================================================================== */}
-      {/* 4. RESPONSIVE MOBILE & TABLET DRAWER NAVIGATION (lg:hidden)         */}
+      {/* 4. RESPONSIVE MOBILE & TABLET DRAWER NAVIGATION (xl:hidden)         */}
       {/* =================================================================== */}
       {isMobileMenuOpen && (
         <>
           {/* Backdrop overlay to easily dismiss when tapping outside */}
           <div
-            className="fixed inset-0 top-14 sm:top-16 bg-black/40 backdrop-blur-2xs z-40 lg:hidden"
+            className="fixed inset-0 top-14 sm:top-16 bg-black/40 backdrop-blur-2xs z-40 xl:hidden"
             onClick={() => setIsMobileMenuOpen(false)}
             aria-hidden="true"
           />
 
           <div
             id="mobile-drawer-nav"
-            className="relative z-50 lg:hidden border-t border-pink-100 dark:border-stone-800 bg-white/98 dark:bg-stone-900/98 px-3.5 sm:px-6 pt-3 pb-6 space-y-3 backdrop-blur-xl shadow-2xl animate-in slide-in-from-top-2 duration-200 max-h-[calc(100vh-4rem)] overflow-y-auto"
+            className="relative z-50 xl:hidden border-t border-pink-100 dark:border-stone-800 bg-white/98 dark:bg-stone-900/98 px-3.5 sm:px-6 pt-3 pb-6 space-y-3 backdrop-blur-xl shadow-2xl animate-in slide-in-from-top-2 duration-200 max-h-[calc(100vh-4rem)] overflow-y-auto"
           >
             <div className="flex items-center justify-between px-1">
               <span className="text-[11px] font-semibold tracking-wider text-pink-600 dark:text-pink-400 uppercase">

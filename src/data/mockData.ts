@@ -178,11 +178,13 @@ Thời Lam đỏ bừng mặt, hai bàn tay rụt rè bám vào góc áo đồng
       chapterNumber: 3,
       partType: 'main',
       isExtra: false,
-      title: 'Chương 3: Hẹn ước dưới tán cây phong mùa hạ (VIP - Có pass)',
+      title: 'Chương 3: Hẹn ước dưới tán cây phong mùa hạ (Có pass)',
       publishedAt: '2026-06-20',
       isLocked: true,
+      passwordHint: 'Loại cây mà Cố Diễn và Thời Lam hẹn ước dưới tán cây (viết thường không dấu, 2 từ)',
+      passwordKey: 'cayphong',
       wordCount: 3600,
-      translatorNote: 'Lời Mellifluous: Chương có nội dung quan trọng nên tớ cài pass nhẹ nhàng nhé. Nhớ đọc gợi ý pass ở trang chủ!',
+      translatorNote: 'Lời Mellifluous: Chương có nội dung ngọt ngào quan trọng nên tớ cài pass nhẹ nhàng nhé. Nhớ đọc gợi ý giải pass bên dưới nha!',
       content: `Đêm trước kỳ thi đại học, cả sân trường vắng lặng không một bóng người.
 
 Dưới gốc cây phong già cạnh sân bóng rổ, Cố Diễn lấy từ trong túi áo ra một chiếc vòng tay dây đỏ đan tay tỉ mỉ, cẩn thận đeo vào cổ tay mảnh khảnh của Thời Lam.
@@ -266,11 +268,13 @@ Cố Diễn mở mắt, trong con ngươi màu hổ phách chỉ phản chiếu 
       partType: 'extra',
       isExtra: true,
       extraNumber: 3,
-      title: 'Phiên ngoại 3: Một ngày làm bố mẹ bỉm sữa của Cố Diễn - Thời Lam (VIP - Có pass)',
+      title: 'Phiên ngoại 3: Một ngày làm bố mẹ bỉm sữa của Cố Diễn - Thời Lam (Có pass)',
       publishedAt: '2026-07-20',
       isLocked: true,
+      passwordHint: 'Tên ở nhà của con gái nhỏ của Cố Diễn và Thời Lam (2 từ viết thường không dấu: tieu...)',
+      passwordKey: 'tieudau',
       wordCount: 4100,
-      translatorNote: 'Lời Mellifluous: Phiên ngoại em bé nhỏ siêu đáng yêu! Pass là "chuyen" nha cả nhà ơi!',
+      translatorNote: 'Lời Mellifluous: Phiên ngoại em bé nhỏ siêu đáng yêu! Giải pass bên dưới để mở nhé các nàng 🍓',
       content: `Gia đình nhỏ đón thêm một thành viên mới: Bé Cố Tiểu Dâu tròn hai tuổi.
 
 Buổi chiều chủ nhật, Cố Diễn ngồi trên thảm lông phòng khách, kiên nhẫn lắp ráp lâu đài lego cho con gái. Cô bé con với đôi mắt to tròn long lanh giống hệt Thời Lam, tay ôm hộp sữa dâu nhỏ lon ton chạy đến ôm lấy chân bố.
@@ -311,11 +315,13 @@ Thế nhưng, cuốn từ điển ấy đã bị một bạn học nào đó mư
       chapterNumber: 2,
       partType: 'main',
       isExtra: false,
-      title: 'Chương 2: Cuộc hội ngộ tại triển lãm tranh mùa hạ (VIP - Có pass)',
+      title: 'Chương 2: Cuộc hội ngộ tại triển lãm tranh mùa hạ (Có pass)',
       publishedAt: '2026-08-05',
       isLocked: true,
+      passwordHint: 'Từ tiếng Anh chỉ sự tình cờ may mắn ngọt ngào được đánh dấu trong cuốn từ điển (11 chữ cái viết thường: serendipity)',
+      passwordKey: 'serendipity',
       wordCount: 3400,
-      translatorNote: 'Lời Mellifluous: Đọc gợi ý giải pass trong tab Password nhé các nàng!',
+      translatorNote: 'Lời Mellifluous: Chương tái ngộ đầy cảm xúc, pass nhẹ nhàng từ trang 52 cuốn từ điển nhé!',
       content: `Tại phòng tranh trưng bày tác phẩm "Mùa Hạ Vĩnh Cửu", Lâm Nhĩ Nguyệt sững sờ trước bức tranh sơn dầu vẽ một cô gái buộc tóc đuôi ngựa ngồi bên khung cửa sổ lớp học.
 
 Góc dưới bên phải bức tranh có đề một dòng chữ nhỏ:
@@ -391,11 +397,13 @@ Vòng tay từ phía sau ôm lấy eo cô thật khẽ, cằm anh tựa lên vai
       partType: 'extra',
       isExtra: true,
       extraNumber: 3,
-      title: 'Phiên ngoại 3: Chuyến du lịch ngắm cực quang ở phương Bắc (VIP - Có pass)',
+      title: 'Phiên ngoại 3: Chuyến du lịch ngắm cực quang ở phương Bắc (Có pass)',
       publishedAt: '2026-09-02',
       isLocked: true,
+      passwordHint: 'Loài hoa gắn liền với bức thư tình năm mười bảy tuổi (3 từ viết thường không dấu: hoaanhdao)',
+      passwordKey: 'hoaanhdao',
       wordCount: 3900,
-      translatorNote: 'Lời Mellifluous: Phiên ngoại tuần trăng mật lãng mạn ngắm cực quang! Pass là "hoa anh dao" nhé!',
+      translatorNote: 'Lời Mellifluous: Phiên ngoại tuần trăng mật lãng mạn ngắm cực quang! Pass là "hoaanhdao" nhé các nàng 🌸',
       content: `Bắc Cực quang xanh ngắt phủ bóng râm mát trên bầu trời đêm tuyết trắng.
 
 Giữa màn đêm huyền diệu của vùng cực Bắc, Thẩm Hoài An khoác thêm chiếc áo choàng lông dày cộm cho Lâm Nhĩ Nguyệt, kéo cô vào lòng để sưởi ấm.

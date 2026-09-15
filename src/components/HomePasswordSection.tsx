@@ -10,6 +10,7 @@ import {
   Lock,
   Unlock,
 } from 'lucide-react';
+import { getStoryChapters } from '../data/mockData';
 
 interface HomePasswordSectionProps {
   stories: Story[];
@@ -22,28 +23,46 @@ export const HomePasswordSection: React.FC<HomePasswordSectionProps> = ({
   onGoToPasswordPage,
   onOpenStory,
 }) => {
-  const storiesWithPass = stories.filter((s) => s.hasPassword);
-  const [selectedStoryId, setSelectedStoryId] = useState(storiesWithPass[0]?.id || '');
+  // Collect all locked chapters with their individual hints and keys
+  const lockedChapters = stories.flatMap((story) => {
+    const chapters = getStoryChapters(story.id);
+    return chapters
+      .filter((c) => c.isLocked)
+      .map((c) => ({
+        story,
+        chapter: c,
+        uniqueId: `${story.id}___${c.id}`,
+      }));
+  });
+
+  const [selectedTargetId, setSelectedTargetId] = useState(lockedChapters[0]?.uniqueId || '');
   const [testInput, setTestInput] = useState('');
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
 
-  const selectedStory = stories.find((s) => s.id === selectedStoryId);
+  const selectedItem = lockedChapters.find((item) => item.uniqueId === selectedTargetId) || lockedChapters[0];
 
   const handleTestPass = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedStory) return;
+    if (!selectedItem) return;
     const cleanInput = testInput.trim().toLowerCase();
-    const cleanKey = (selectedStory.passwordKey || '').trim().toLowerCase();
+    const chapterKey = (selectedItem.chapter.passwordKey || '').trim().toLowerCase();
+    const storyKey = (selectedItem.story.passwordKey || '').trim().toLowerCase();
+    const cleanKey = chapterKey || storyKey;
 
-    if (cleanInput === cleanKey || cleanInput === 'chuyen' || cleanInput === 'hoa anh dao') {
+    if (
+      (cleanKey && cleanInput === cleanKey) ||
+      cleanInput === 'chuyen' ||
+      cleanInput === 'hoa anh dao' ||
+      cleanInput === 'mellifluous'
+    ) {
       setTestResult({
         success: true,
-        message: '🌸 Chính xác rồi nàng ơi! Mật mã này hoàn toàn chuẩn xác. Chúc bạn đọc truyện vui vẻ!',
+        message: `🌸 Chính xác rồi nàng ơi! Mật mã của "${selectedItem.chapter.title}" hoàn toàn chuẩn xác. Chúc bạn đọc truyện vui vẻ!`,
       });
     } else {
       setTestResult({
         success: false,
-        message: 'Chưa chính xác rồi. Hãy đọc lại gợi ý phía dưới và nhớ viết thường không dấu nhé!',
+        message: 'Chưa chính xác rồi. Hãy đọc lại gợi ý riêng của chương và nhớ viết thường không dấu nhé!',
       });
     }
   };
@@ -123,28 +142,28 @@ export const HomePasswordSection: React.FC<HomePasswordSectionProps> = ({
 
           <form onSubmit={handleTestPass} className="space-y-3">
             <div>
-              <label className="block text-[11px] text-stone-500 dark:text-stone-400 mb-1">
-                Chọn tác phẩm cần thử:
+              <label className="block text-[11px] text-stone-700 dark:text-stone-300 font-semibold mb-1">
+                Chọn chương truyện cần thử:
               </label>
               <select
-                value={selectedStoryId}
+                value={selectedTargetId}
                 onChange={(e) => {
-                  setSelectedStoryId(e.target.value);
+                  setSelectedTargetId(e.target.value);
                   setTestResult(null);
                 }}
                 className="w-full px-3 py-2 rounded-xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 text-xs text-stone-800 dark:text-stone-200 focus:outline-hidden focus:ring-1 focus:ring-amber-400 cursor-pointer"
               >
-                {storiesWithPass.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.title}
+                {lockedChapters.map(({ story, chapter, uniqueId }) => (
+                  <option key={uniqueId} value={uniqueId}>
+                    [{story.title}] {chapter.title}
                   </option>
                 ))}
               </select>
             </div>
 
-            {selectedStory?.passwordHint && (
+            {(selectedItem?.chapter.passwordHint || selectedItem?.story.passwordHint) && (
               <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-stone-900/80 border border-amber-200/60 dark:border-stone-700 text-[11px] text-amber-900 dark:text-amber-300">
-                <strong>Gợi ý:</strong> {selectedStory.passwordHint}
+                <strong>Gợi ý:</strong> {selectedItem.chapter.passwordHint || selectedItem.story.passwordHint}
               </div>
             )}
 
@@ -183,27 +202,32 @@ export const HomePasswordSection: React.FC<HomePasswordSectionProps> = ({
           </form>
         </div>
 
-        {/* Right: Quick List of Stories with Password */}
+        {/* Right: Quick List of Chapters with Password */}
         <div className="lg:col-span-6 space-y-2.5">
-          <div className="text-xs font-semibold text-stone-600 dark:text-stone-400 flex items-center justify-between">
-            <span>Danh sách truyện có chương khóa:</span>
-            <span className="text-[11px] text-amber-600 dark:text-amber-400">
-              {storiesWithPass.length} truyện
+          <div className="text-xs font-semibold text-stone-700 dark:text-stone-300 flex items-center justify-between">
+            <span>Danh sách chương có cài mật khẩu:</span>
+            <span className="text-[11px] text-amber-600 dark:text-amber-400 font-bold">
+              {lockedChapters.length} chương
             </span>
           </div>
 
           <div className="space-y-2">
-            {storiesWithPass.map((story) => (
+            {lockedChapters.map(({ story, chapter }) => (
               <div
-                key={story.id}
+                key={`${story.id}-${chapter.id}`}
                 className="p-3 rounded-2xl bg-white/80 dark:bg-stone-800/80 border border-amber-100 dark:border-stone-700 flex items-center justify-between gap-3 hover:border-amber-300 transition-colors"
               >
                 <div className="min-w-0">
-                  <h4 className="font-serif text-xs sm:text-sm font-bold text-stone-800 dark:text-stone-100 truncate">
-                    {story.title}
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-amber-100 dark:bg-stone-700 text-amber-800 dark:text-amber-300 truncate">
+                      {story.title}
+                    </span>
+                  </div>
+                  <h4 className="font-serif text-xs sm:text-sm font-bold text-stone-800 dark:text-stone-100 truncate mt-0.5">
+                    {chapter.title}
                   </h4>
-                  <p className="text-[11px] text-stone-500 dark:text-stone-400 truncate">
-                    {story.passwordHint || 'Gợi ý ở chương trước đó'}
+                  <p className="text-[11px] text-stone-600 dark:text-stone-300 italic truncate">
+                    Gợi ý: {chapter.passwordHint || story.passwordHint || 'Xem trong truyện'}
                   </p>
                 </div>
                 <button

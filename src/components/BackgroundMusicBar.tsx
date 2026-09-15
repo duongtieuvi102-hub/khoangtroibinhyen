@@ -11,9 +11,17 @@ import {
   ChevronUp,
   ChevronDown,
   Sparkles,
+  Plus,
+  ExternalLink,
 } from 'lucide-react';
+import { useAuth } from '../lib/authContext';
 
-export const BackgroundMusicBar: React.FC = () => {
+interface BackgroundMusicBarProps {
+  onOpenAuthorStudio?: () => void;
+}
+
+export const BackgroundMusicBar: React.FC<BackgroundMusicBarProps> = ({ onOpenAuthorStudio }) => {
+  const { isAuthor } = useAuth();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState<AudioTrack>(TRACK_LIST[0]);
   const [tracks, setTracks] = useState<AudioTrack[]>(bgmEngine.getTracks());
@@ -80,16 +88,32 @@ export const BackgroundMusicBar: React.FC = () => {
           <div className="flex items-center justify-between border-b border-pink-100 dark:border-stone-800 pb-2">
             <div className="flex items-center gap-1.5 text-xs font-semibold text-pink-600 dark:text-pink-400">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Giai điệu đọc truyện</span>
+              <span>Giai điệu đọc truyện ({tracks.length})</span>
             </div>
-            <button
-              type="button"
-              onClick={() => setIsExpanded(false)}
-              className="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 text-xs cursor-pointer p-1"
-              title="Thu gọn"
-            >
-              <ChevronDown className="w-4 h-4" />
-            </button>
+            <div className="flex items-center gap-1">
+              {onOpenAuthorStudio && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsExpanded(false);
+                    onOpenAuthorStudio();
+                  }}
+                  className="px-2 py-0.5 rounded-lg bg-pink-100 hover:bg-pink-200 dark:bg-pink-950 dark:hover:bg-pink-900 text-pink-700 dark:text-pink-300 text-[10px] font-semibold flex items-center gap-1 cursor-pointer transition-colors"
+                  title="Thêm hoặc quản lý danh sách phát nhạc trong Bàn làm việc"
+                >
+                  <Plus className="w-2.5 h-2.5" />
+                  <span>Quản lý nhạc</span>
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => setIsExpanded(false)}
+                className="text-stone-400 hover:text-stone-600 dark:hover:text-stone-200 text-xs cursor-pointer p-1"
+                title="Thu gọn"
+              >
+                <ChevronDown className="w-4 h-4" />
+              </button>
+            </div>
           </div>
 
           {/* Track List */}
